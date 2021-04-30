@@ -1,0 +1,18 @@
+{
+  "name": "aws-connect-vanify",
+  "version": "1.0.0",
+  "description": "AWS Connect Vanity Number Example",
+  "scripts": {
+      "deploy:backend": "pushd backend && sls deploy && popd"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serverless": "^2.23.0",
+    "serverless-plugin-scripts": "^1.0.2"
+  },
+  "author": "Braden Mars <bradenmars@bradenmars.me>",
+  "license": "MIT"
+}
