@@ -1,0 +1,17 @@
+# Ignore
+README.md
+.gitignore
+.idea
+.envrc
+.direnv
+.serverless
+.pre-commit-config.yaml
+Dockerfile
+serverless.yml
+.dockerignore
+deploy
+
+# Don't ignore
+!pyproject.toml
+!poetry.lock
+!vanify
