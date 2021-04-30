@@ -35,6 +35,7 @@ class ConnectApi:
 
     _client: Optional[BaseClient] = None
     instance_id: str = os.environ.get("INSTANCE_ID")
+    aws_region: str = os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
 
     def __attrs_post_init__(self):
         for opts in self._PAGINATED:
@@ -44,7 +45,7 @@ class ConnectApi:
     def client(self) -> BaseClient:
         """Lazily instantiated Boto3 Connect client. """
         if not self._client:
-            self._client = boto3.client("connect", region_name="us-east-1")
+            self._client = boto3.client("connect", region_name=self.aws_region)
         return self._client
 
     def _create_paginator(self, attribute: str, method: str, key=("Name",), **kwargs):
@@ -102,6 +103,12 @@ class ConnectApi:
                     f'get_{attribute.rstrip("s")}': partial(query_profile, attribute, key=key),
                 },
             )
+
+    def get_aws_account_id(self) -> str:
+        """Retrieve currently authenticated AWS account id."""
+        sts = boto3.client("sts", region_name=self.aws_region)
+        identity = sts.get_caller_identity()
+        return identity["Account"]
 
     def update_contact_flow(self, content: str, contact_flow: str):
         return self.client.update_contact_flow_content(
