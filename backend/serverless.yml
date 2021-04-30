@@ -4,6 +4,9 @@ org: bradenm
 
 frameworkVersion: '2'
 
+plugins:
+    - serverless-plugin-scripts
+
 provider:
   name: aws
   lambdaHashingVersion: 20201221
@@ -34,6 +37,13 @@ provider:
 # you can define service wide environment variables here
 #  environment:
 #    variable1: value1
+
+custom:
+  scripts:
+    commands:
+      update-flow: python -m deploy deploy-flow aws-connect-vanify ${sls:stage}
+    hooks:
+      'deploy:finalize': python -m deploy deploy-flow aws-connect-vanify ${sls:stage}
 
 functions:
   vanify:
