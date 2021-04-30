@@ -30,6 +30,7 @@ class ConnectEventContactData(TypedDict):
 
 
 class ConnectEventDetails(TypedDict):
+    ContactData: ConnectEventContactData
     Parameters: Dict[str, str]
 
 
