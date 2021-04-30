@@ -1,11 +1,15 @@
 """AWS Connect Vanify handler."""
 
+from typing import TypedDict
 
-def handler(event, context):
-    body = {
-        "message": "Hello, world! Your function executed successfully!",
-    }
+from .types import ConnectContactFlowEvent
 
-    response = {"statusCode": 200, "body": json.dumps(body)}
 
-    return response
+class VanifyParams(TypedDict):
+    inputNumber: str
+
+
+def handler(event: ConnectContactFlowEvent, context):
+    params: VanifyParams = event["Details"]["Parameters"]
+    body = {"output": params["inputNumber"]}
+    return body

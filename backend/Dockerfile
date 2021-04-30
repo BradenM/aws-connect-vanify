@@ -35,7 +35,7 @@ RUN pip install --no-cache-dir -U pip \
   && pip install --no-cache-dir -f /wheels/ -r /wheels/requirements.txt \
   && rm -rf /wheels
 
-COPY app.py ./
+COPY . .
 
 # You can overwrite command in `serverless.yml` template
-CMD ["app.handler"]
+CMD ["vanify.app.handler"]

@@ -9,7 +9,7 @@ provider:
   lambdaHashingVersion: 20201221
   ecr:
     images:
-      appimage:
+      aws-connect-vanify:
         path: ./
 
   stage: dev
@@ -36,9 +36,9 @@ provider:
 #    variable1: value1
 
 functions:
-  hello:
+  vanify:
     image:
-      name: appimage
+      name: aws-connect-vanify
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
