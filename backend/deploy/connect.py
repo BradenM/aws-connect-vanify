@@ -29,6 +29,9 @@ class ConnectApi:
             ),
         ),
     ]
+    _LAMBDA_ARN_TMPL: ClassVar[
+        str
+    ] = "arn:aws:lambda:{region}:{account_id}:function:{service_name}-{stage}-{name}"
 
     get_contact_flow: Callable[[str], Optional[str]] = attr.ib(init=False)
     get_phone_number: Callable[[str], Optional[str]] = attr.ib(init=False)
@@ -110,12 +113,43 @@ class ConnectApi:
         identity = sts.get_caller_identity()
         return identity["Account"]
 
+    def get_lambda_arn(self, *, service_name: str, stage: str, name: str, **kwargs) -> str:
+        """Create formatted AWS lambda function ARN.
+
+        Args:
+            service_name: parent service of lambda function.
+            stage: deploy stage.
+            name: function name.
+
+        Keyword Args:
+            account_id: AWS account id.
+                Defaults to currently authenticated account id.
+            region: AWS region lambda resides in.
+                Defaults to `ConnectApi`'s region.
+
+        Returns:
+            Formatted AWS lambda function ARN.
+
+        """
+        kwargs.setdefault("account_id", self.get_aws_account_id())
+        kwargs.setdefault("region", self.aws_region)
+        return self._LAMBDA_ARN_TMPL.format(
+            service_name=service_name, stage=stage, name=name, **kwargs
+        )
+
     def update_contact_flow(self, content: str, contact_flow: str):
+        """Update content of a contact flow."""
         return self.client.update_contact_flow_content(
             InstanceId=self.instance_id, ContactFlowId=contact_flow, Content=content
         )
 
-    def associate_lambda_arn(self, lambda_arn: str):
-        return self.client.associate_lambda_function(
-            InstanceId=self.instance_id, FunctionArn=lambda_arn
-        )
+    def associate_lambda_arn(self, *, lambda_arn: Optional[str] = None, **kwargs):
+        """Associate lambda function arn with connect instance.
+
+        Args:
+            lambda_arn: full arn to associate.
+            **kwargs: args passed to `ConnectApi.get_lambda_arn`
+
+        """
+        _arn = lambda_arn or self.get_lambda_arn(**kwargs)
+        return self.client.associate_lambda_function(InstanceId=self.instance_id, FunctionArn=_arn)
