@@ -42,6 +42,10 @@ $ yarn deploy:backend  # a.k.a: sls deploy (from ./backend)
 
 <p align="center"><img src=".github/imgs/architecture.png" alt="re-frame logo"></p>
 
+#### DynamoDB Schema
+
+<p align="center"><img src=".github/imgs/dynamodb.png" alt="re-frame logo"></p>
+
 ### Production
 
 This sample app would require (at least) the following for a production instance:
