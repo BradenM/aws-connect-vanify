@@ -9,6 +9,9 @@
     "test:ci": "cypress run --headless"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "primeflex": "^2.0.0",
+    "primevue": "^3",
     "vue": "~3.0",
     "vuex": "~4.0"
   },
@@ -28,12 +31,15 @@
     "autoprefixer": "~10.2",
     "cypress": "^7.0",
     "eslint": "~7",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "~7",
     "postcss": "~8.2",
     "postcss-nesting": "~7.0",
     "tailwindcss": "~2.1",
     "typescript": "~4.2",
-    "vite": "~2.1",
+    "vite": "~2.2.3",
     "wait-on": "~5.3"
   }
 }
