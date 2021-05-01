@@ -6,9 +6,13 @@ Resources:
       AttributeDefinitions:
         - AttributeName: callerId
           AttributeType: S
+        - AttributeName: contactId
+          AttributeType: S
       KeySchema:
-        - AttributeName: callerId
+        - AttributeName: contactId
           KeyType: HASH
+        - AttributeName: callerId
+          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
