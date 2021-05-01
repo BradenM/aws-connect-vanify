@@ -1,16 +1,16 @@
 import { MutationTree } from 'vuex'
-import { State } from './state'
+import { RecentCaller, State } from './state'
 
 export enum Mutation {
-  INCREMENT = 'INCREMENT',
+  SET_CALLERS = 'SET_CALLERS',
 }
 
 export type Mutations<S = State> = {
-  [Mutation.INCREMENT](state: S, payload: number): void
+  [Mutation.SET_CALLERS](state: S, payload: RecentCaller[]): void
 }
 
 export const mutations: MutationTree<State> & Mutations = {
-  [Mutation.INCREMENT](state: State, payload: number = 1) {
-    state.count += payload
+  [Mutation.SET_CALLERS](state: State, payload: RecentCaller[] = []) {
+    state.recentCallers = payload
   },
 }
