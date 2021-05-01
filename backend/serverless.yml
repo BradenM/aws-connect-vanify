@@ -10,6 +10,7 @@ plugins:
 provider:
   name: aws
   lambdaHashingVersion: 20201221
+  iamRoleStatements: ${file(resources/roles.yml):RoleStatements}
   ecr:
     images:
       aws-connect-vanify:
