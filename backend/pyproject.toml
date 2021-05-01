@@ -3,11 +3,15 @@ name = "aws-connect-vanify"
 version = "0.1.0"
 description = "AWS Connect Phone Number vanity converter"
 authors = ["Braden Mars <bradenmars@bradenmars.me>"]
+packages = [
+    { include = "vanify" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-phonenumbers = "^8.12.21"
 attrs = "^20.3.0"
+phonenumberslite = "^8.12.22"
+pygtrie = "^2.4.2"
 
 [tool.poetry.dev-dependencies]
 autoflake = "^1.4"
