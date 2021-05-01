@@ -28,9 +28,17 @@ def deploy_flow(service_name: str, stage: str):
     lambda_arn = connect.get_lambda_arn(service_name=service_name, stage=stage, name="vanify")
     flow_content = get_flow_tmpl().replace("<LAMBDA_ARN>", lambda_arn)
     flow_id = connect.get_contact_flow(FLOW_NAME)
-    typer.secho(f"Got Flow ID: {flow_id}", bold=True, fg=typer.colors.BRIGHT_WHITE)
-    connect.update_contact_flow(flow_content, flow_id)
-    typer.secho("Update contact flow!", fg=typer.colors.BRIGHT_GREEN)
+    if not flow_id:
+        typer.secho(
+            f"Could not find Flow ID for {FLOW_NAME}, creating...",
+            bold=True,
+            fg=typer.colors.BRIGHT_YELLOW,
+        )
+        connect.create_contact_flow(FLOW_NAME, flow_content)
+    else:
+        typer.secho(f"Got Flow ID: {flow_id}", bold=True, fg=typer.colors.BRIGHT_WHITE)
+        connect.update_contact_flow(flow_content, flow_id)
+    typer.secho("Updated contact flow!", fg=typer.colors.BRIGHT_GREEN)
     connect.associate_lambda_arn(lambda_arn=lambda_arn)
     typer.secho("Associated lambda with instance!", fg=typer.colors.BRIGHT_GREEN)
 

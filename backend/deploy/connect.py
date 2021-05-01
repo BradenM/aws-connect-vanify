@@ -137,6 +137,12 @@ class ConnectApi:
             service_name=service_name, stage=stage, name=name, **kwargs
         )
 
+    def create_contact_flow(self, name: str, content: str):
+        """Create new contact flow."""
+        return self.client.create_contact_flow(
+            InstanceId=self.instance_id, Name=name, Type="CONTACT_FLOW", Content=content
+        )
+
     def update_contact_flow(self, content: str, contact_flow: str):
         """Update content of a contact flow."""
         return self.client.update_contact_flow_content(
