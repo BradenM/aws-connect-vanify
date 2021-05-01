@@ -20,6 +20,7 @@ class ConnectEventContactData(TypedDict):
     Attributes: Dict[str, str]
     Channel: ContactFlowChannel
     ContactId: str
+    CustomerEndpoint: ContactFlowEndpoint
     InitialContactId: str
     InitiationMethod: ContactFlowInitMethod
     InstanceArn: str
