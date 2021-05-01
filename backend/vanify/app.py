@@ -59,5 +59,6 @@ def recent(event, context):
     """Return recent vanity numbers."""
     logger.info("entering recent handler:", event, context)
     recent_callers = list(VanifyModel.scan(limit=5))
+    recent_callers = reversed(sorted(recent_callers, key=lambda c: c.date))
     serialized_callers = [c.as_dict() for c in recent_callers]
     return http_response(dict(recent=serialized_callers))
