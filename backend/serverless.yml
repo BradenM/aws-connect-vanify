@@ -11,6 +11,9 @@ provider:
   name: aws
   lambdaHashingVersion: 20201221
   iamRoleStatements: ${file(resources/roles.yml):RoleStatements}
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
   ecr:
     images:
       aws-connect-vanify:
@@ -50,7 +53,18 @@ functions:
   vanify:
     image:
       name: aws-connect-vanify
-#    The following are a few example events you can configure
+  recent:
+    image:
+      name: aws-connect-vanify
+      command:
+        - vanify.app.recent
+    events:
+      - http:
+          path: recent
+          method: get
+          cors: true
+
+
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
 #    events:
