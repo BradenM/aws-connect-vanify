@@ -31,7 +31,7 @@ export const actions: ActionTree<State, State> & Actions = {
     console.log('got response:', resp.data)
     const formatted = resp.data.recent.map((c) => ({
       ...c,
-      results: c.results.join(', '),
+      results: c.results.reverse().join(', '),
       date: new Date(c.date).toDateString(),
       callerId: c.caller_id,
     }))
