@@ -1,0 +1,17 @@
+org: bradenm
+app: aws-connect-vanify
+name: frontend
+
+stage: prod
+
+component: website
+inputs:
+  src:
+    src: ./src
+    hook: yarn run build
+    dist: ./dist
+  domain: vanify.bradenmars.me
+  region: us-east-1
+  bucketName: vanify.bradenmars.me
+  indexDocument: index.html
+  errorDocument: index.html
