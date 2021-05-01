@@ -1,5 +1,6 @@
 """AWS Connect Vanify Convert."""
 
+import logging
 from collections import deque
 from pathlib import Path
 from queue import PriorityQueue
@@ -8,6 +9,8 @@ from typing import Deque, Dict, Iterator, List, NamedTuple, Optional
 import attr
 import phonenumbers
 import pygtrie
+
+logger = logging.getLogger("convert")
 
 
 class ValidationState(NamedTuple):
@@ -199,18 +202,14 @@ class VanifiedResult:
         return ["".join(n.as_phonenumber) for n in self.node_results]
 
     def ensure_put(self, value: WordNode):
-        print("pushing into pqueue:", value)
+        logger.info("pushing into pqueue:", value)
         if self.words_queue.full():
-            # 'pop' item
             r = self.words_queue.get_nowait()
-            print("popped item:", r)
+            logger.debug("popped item:", r)
         self.words_queue.put_nowait(value)
 
     @staticmethod
     def find_char_prefix(word, index) -> str:
-        # Returns the prefix length of contiguous characters ENDING AT THE GIVEN INDEX
-        # For example word = "123RIDE4", index = 6
-        # Will return prefix_length = 4  (char_prefix "RIDE" ends at index=6)
         char_prefix = ""
         while index >= 0 and word[index].isalpha():
             char_prefix = word[index] + char_prefix
@@ -376,7 +375,7 @@ class VanifiedResult:
                     or is_alpha_and_valid_word
                 ):
                     next_word_num = cur_wordified[:cur_idx] + char + cur_wordified[cur_idx + 1 :]
-                    print("Next word:", next_word_num)
+                    logger.info("Next word:", next_word_num)
                     next_nchars = cur_n_chars_in_word + (1 if char.isalpha() else 0)
                     v_state = results.validate(next_word_num)
                     queue.append(
