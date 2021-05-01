@@ -1,13 +1,15 @@
 """AWS Connect Vanify handler."""
+import json
 import logging
 from datetime import datetime
-from typing import TypedDict
+from typing import Any, Dict, TypedDict
 
 import phonenumbers
 from vanify import convert
 from vanify.models import VanifyModel
 from vanify.types import ConnectContactFlowEvent
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("vanify")
 
 
@@ -20,7 +22,7 @@ def create_vanify_entry(params: VanifyParams, contact_id: str, caller_id: str):
     _caller_id = phonenumbers.parse(caller_id)
     caller_id = phonenumbers.format_number(_caller_id, phonenumbers.PhoneNumberFormat.E164)
     utc_now = datetime.utcnow()
-    inst = VanifyModel(caller_id, date=utc_now, input=params["inputNumber"], contact_id=contact_id)
+    inst = VanifyModel(contact_id, caller_id, date=utc_now, input=params["inputNumber"])
     return inst
 
 
@@ -42,3 +44,18 @@ def handler(event: ConnectContactFlowEvent, context):
     prompt_resp = f'<speak>Five vanity numbers available for {prompt_as_tel_tmpl.format(params["inputNumber"])} are: {prompt_body_resp} </speak>'
     body = {"results": resp_body, "prompt_response": prompt_resp}
     return body
+
+
+def http_response(body: Dict[str, Any], status=200):
+    """Return HTTP lambda formatted response."""
+    resp = dict(statusCode=status, body=json.dumps(body))
+    logger.info("returning HTTP response: %s", resp)
+    return resp
+
+
+def recent(event, context):
+    """Return recent vanity numbers."""
+    logger.info("entering recent handler:", event, context)
+    recent_callers = list(VanifyModel.scan(limit=5))
+    serialized_callers = [c.as_dict() for c in recent_callers]
+    return http_response(dict(recent=serialized_callers))
