@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "AWS Connect Vanity Number Example",
   "scripts": {
+      "deploy:frontend": "pushd frontend && sls deploy && popd",
       "deploy:backend": "pushd backend && sls deploy && popd",
       "update:backend:vanify": "pushd backend && sls deploy -f vanify && popd",
       "update:backend:recent": "pushd backend && sls deploy -f recent && popd"
