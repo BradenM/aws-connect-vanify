@@ -100,3 +100,6 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+resources:
+  - ${file(resources/dynamodb.yml)}

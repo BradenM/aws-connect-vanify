@@ -1,0 +1,14 @@
+Resources:
+  vanifyTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ConnectVanify
+      AttributeDefinitions:
+        - AttributeName: callerId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: callerId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
