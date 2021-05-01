@@ -36,9 +36,16 @@ $ yarn deploy:backend  # a.k.a: sls deploy (from ./backend)
 
 ## Notes
 
+### Architecture
+
+#### High Level Cloud Architecture
+
+<p align="center"><img src=".github/imgs/architecture.png" alt="re-frame logo"></p>
+
 ### Production
 
 This sample app would require (at least) the following for a production instance:
 * Api Gateway / Lambda Authorization.
 * Replication across different regions.
 * Higher test coverage.
+* CI/CD Workflows for automatic deployment.
