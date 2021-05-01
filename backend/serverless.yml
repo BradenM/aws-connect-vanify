@@ -44,6 +44,5 @@ functions:
           method: get
           cors: true
 
-
 resources:
   - ${file(resources/dynamodb.yml)}

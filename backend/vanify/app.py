@@ -48,7 +48,9 @@ def handler(event: ConnectContactFlowEvent, context):
 
 def http_response(body: Dict[str, Any], status=200):
     """Return HTTP lambda formatted response."""
-    resp = dict(statusCode=status, body=json.dumps(body))
+    resp = dict(
+        statusCode=status, body=json.dumps(body), headers={"Access-Control-Allow-Origin": "*"}
+    )
     logger.info("returning HTTP response: %s", resp)
     return resp
 
