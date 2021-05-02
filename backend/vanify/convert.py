@@ -1,6 +1,7 @@
 """AWS Connect Vanify Convert."""
 
 import logging
+import sys
 from collections import deque
 from pathlib import Path
 from queue import PriorityQueue
@@ -10,7 +11,12 @@ import attr
 import phonenumbers
 import pygtrie
 
-logger = logging.getLogger("convert")
+# TODO: For a real application, setup proper log handling.
+ch = logging.StreamHandler(sys.stdout)
+ch.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+logger = logging.getLogger(__name__)
+logger.addHandler(ch)
+logger.setLevel(logging.INFO)
 
 
 class ValidationState(NamedTuple):
@@ -202,10 +208,10 @@ class VanifiedResult:
         return ["".join(n.as_phonenumber) for n in self.node_results]
 
     def ensure_put(self, value: WordNode):
-        logger.info("pushing into pqueue:", value)
+        logger.debug("pushing into pqueue: %s", value)
         if self.words_queue.full():
             r = self.words_queue.get_nowait()
-            logger.debug("popped item:", r)
+            logger.debug("popped item: %s", r)
         self.words_queue.put_nowait(value)
 
     @staticmethod
@@ -375,7 +381,7 @@ class VanifiedResult:
                     or is_alpha_and_valid_word
                 ):
                     next_word_num = cur_wordified[:cur_idx] + char + cur_wordified[cur_idx + 1 :]
-                    logger.info("Next word:", next_word_num)
+                    logger.debug("Next word: %s", next_word_num)
                     next_nchars = cur_n_chars_in_word + (1 if char.isalpha() else 0)
                     v_state = results.validate(next_word_num)
                     queue.append(

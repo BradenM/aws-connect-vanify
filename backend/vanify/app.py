@@ -1,6 +1,7 @@
 """AWS Connect Vanify handler."""
 import json
 import logging
+import sys
 from datetime import datetime
 from typing import Any, Dict, TypedDict
 
@@ -9,8 +10,12 @@ from vanify import convert
 from vanify.models import VanifyModel
 from vanify.types import ConnectContactFlowEvent
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger("vanify")
+# TODO: For a real application, setup proper log handling.
+ch = logging.StreamHandler(sys.stdout)
+ch.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+logger = logging.getLogger(__name__)
+logger.addHandler(ch)
+logger.setLevel(logging.INFO)
 
 
 class VanifyParams(TypedDict):
@@ -28,7 +33,7 @@ def create_vanify_entry(params: VanifyParams, contact_id: str, caller_id: str):
 
 def handler(event: ConnectContactFlowEvent, context):
     """Vanify entrypoint."""
-    logger.info("entering vanify handler:", event, context)
+    logger.info("entering vanify handler: %s %s", event, context)
     params: VanifyParams = event["Details"]["Parameters"]
     contact_id = event["Details"]["ContactData"]["ContactId"]
     caller_id = event["Details"]["ContactData"]["CustomerEndpoint"]["Address"]
@@ -57,7 +62,7 @@ def http_response(body: Dict[str, Any], status=200):
 
 def recent(event, context):
     """Return recent vanity numbers."""
-    logger.info("entering recent handler:", event, context)
+    logger.info("entering recent handler: %s %s", event, context)
     recent_callers = list(VanifyModel.scan(limit=5))
     recent_callers = reversed(sorted(recent_callers, key=lambda c: c.date))
     serialized_callers = [c.as_dict() for c in recent_callers]
