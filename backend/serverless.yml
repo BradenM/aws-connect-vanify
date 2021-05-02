@@ -31,9 +31,14 @@ custom:
 
 functions:
   vanify:
+    description: AWS Connect Vanify Entrypoint
+    timeout: 15
+    memorySize: 256
     image:
       name: aws-connect-vanify
   recent:
+    description: Api endpoint for retrieving recent callers.
+    memorySize: 128
     image:
       name: aws-connect-vanify
       command:
